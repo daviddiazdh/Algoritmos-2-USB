@@ -6,13 +6,16 @@
 
 using namespace std;
 
-vector <pair<int, int>> merge(vector<pair<int, int>> U, vector<pair<int, int>> V, vector<pair<int, int>> T, int m, int n) {
+#define value first
+#define position second
+
+vector <pair<long long, int>> merge(vector<pair<long long, int>> U, vector<pair<long long, int>> V, vector<pair<long long, int>> T, int m, int n) {
 
     int i = 0;
     int j = 0;
 
-    U.push_back({100000,U.size()});
-    V.push_back({100000,U.size()});
+    U.push_back({10000000001,U.size()});
+    V.push_back({10000000001,U.size()});
     for(int k = 0; k < m + n; k++){
         
         if(U[i].first < V[j].first){
@@ -28,13 +31,13 @@ vector <pair<int, int>> merge(vector<pair<int, int>> U, vector<pair<int, int>> V
 
 }
 
-vector<pair<int, int>> merge_sort(vector<pair<int, int>> T, float n) {
+vector<pair<long long, int>> merge_sort(vector<pair<long long, int>> T, float n) {
     if( n == 1 ){
         return T;
     } else {
-        vector<pair<int, int>> U(T.begin(), T.begin() + floor( n / 2 ));
-
-        vector<pair<int, int>> V(T.begin() + floor( n / 2 ), T.end());
+        vector<pair<long long, int>> U(T.begin(), T.begin() + floor( n / 2 ));
+        
+        vector<pair<long long, int>> V(T.begin() + floor( n / 2 ), T.end());
 
         U = merge_sort(U, floor( n / 2 ));
         V = merge_sort(V, ceil( n / 2 ));
@@ -44,94 +47,56 @@ vector<pair<int, int>> merge_sort(vector<pair<int, int>> T, float n) {
 
 using namespace std;
 
-int main() 
-{   
+int main()
+{
+    vector<pair<long long, int>> C;
+    vector<int> respuesta;
+    int t, n;
+    scanf("%d", &t);
 
-vector<int> respuesta;
+    while (t > 0)
+    {
+        scanf("%d", &n);
 
-int cantidad;
+        C.resize(n);
+        respuesta.resize(n);
 
-cin >> cantidad;
+        for (int j = 0; j < n; j++)
+        {
+            scanf("%lld", &C[j]);
+            C[j].position = j;
+        }
 
-int contador = 0;
-while(contador < cantidad){
+        C = merge_sort(C, n);
 
-    vector <int> lista;
+        long long suma = 0;
+        int k = 0;
 
-    int tamano;
-    cin >> tamano;
-
-    int k = 0;
-    while(k < tamano){
-        int elemento;
-        cin >> elemento;
-        lista.push_back(elemento);
-        k += 1;
-    } 
-    
-    vector <pair<int, int>> lista_pos;
-
-    int j = 0;
-    for( int  i : lista ){
-
-        lista_pos.push_back({i,j});
-        j += 1;
-
-    }
-
-
-    /*Merge Sort*/
-    lista_pos = merge_sort(lista_pos, lista.size());
-
-
-    /* Lógica más importante del programa 
-        1. Suma los elementos hasta el índice.
-        2. Compara con el siguiente (Si es más grande que el siguiente, 
-        agrega uno a la variable respuesta y repite 1 y 2; si no, se sale del bucle)
-        3. Guarda la variable respuesta en un arreglo "lista_resp" en orden.
-    */
-
-    unsigned i = 0;
-
-    vector <int> lista_iter(tamano); 
-
-    while(i < lista_pos.size()){
-        long long suma = lista_pos[i].first;
-        int iteraciones = 0;
-
-        unsigned j = 0;
-        unsigned k = i;
-        while(k < lista_pos.size()){
-            while(j < k){
-                suma += lista_pos[j].first;
-                j += 1;
-                iteraciones += 1;
+        for (int i = 0; i < n; i++)
+        {
+            if (i == k)
+            {
+                suma += C[i].value;
+                k++;
             }
 
-            if(suma >= lista_pos[k + 1].first){
-                k += 1;
-            } else{
-                break;
+            while (k < n && suma >= C[k].value)
+            {
+                suma += C[k].value;
+                k++;
             }
 
-        } 
-        
-        lista_iter[lista_pos[i].second] = iteraciones;
+            respuesta[C[i].position] = k - 1;
+        }
 
-        i += 1;
+        for (int j = 0; j < n; j++)
+        {
+            printf("%d ", respuesta[j]);
+        }
+        cout << endl;
+
+        t -= 1;
     }
 
-    for( int i : lista_iter ){
-
-        cout << i << " ";
-
-    }
-    cout << endl;
-
-
-}
-
-
-
-return 0;
+    return 0;
 }
