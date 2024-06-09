@@ -65,6 +65,20 @@ int main()
     int key = 0;
     int contador = 1;
     int key_contador = 0;
+    /*
+    Por cada elemento que entre, cuento cuántas veces seguidas ha aparecido dicho elemento y lo comparo con la cantidad de veces que aparece el siguiente a él.
+    De modo que no guardo nada en un arreglo, si no que comparo según entren. 
+    Por ejemplo, si entra 22211122, primero cuenta cuántas veces seguidas aparece el 2, 3 veces y lo compara con las veces que aparece el 1 siguiente, 3 veces.
+    Como 3 <= 3, dice que es posible seleccionar un segmento de tamaño 3 de cada uno y agrega esta posible respuesta al vector de respuestas.
+    Luego hace lo mismo con el 11122, donde dice que 1 aparece 3 veces y 2 2 veces. 
+    Como 3 > 2, dice que es posible seleccionar un segmento de tamaño 2 de cada uno y agrega esta posible respuesta al vector de respuestas.
+
+    El vector de respuestas tiene que ser ordenado para saber cuál será el segmento de tamaño máximo (o la respuesta posible más grande en el vector de respuestas)
+
+    Me aprovecho del BUILD-MAX-HEAP que hace que el vector quede ordenado de forma descendente para luego hacer print de el primer elemento del vector.
+
+    */
+
     while(iterador > 0)
     {
         int i;
@@ -85,6 +99,12 @@ int main()
         }
         key = i;
         iterador -= 1;
+        /*
+        En key_contador se guarda la cantidad de elementos previos del mismo tipo
+        Por ejemplo, en el segmento 11122211, 
+        key_contador guardaría el tamaño del segmento de solo 1's para poder compararlo con el de solo 2's. 
+        Así no pierdo la info del segmento previo.
+        */
     }
 
     if(contador >= key_contador)
@@ -97,7 +117,10 @@ int main()
 
     resp_posibles = BUILD_MAX_HEAP(resp_posibles);
 
-    
+    /*
+    El vector de respuestas posibles guarda los segmentos de tamaño n de cada uno que se pueden formar, 
+    pero se quiere es la longitud total del segmento, así que imprimo la respuesta multiplicada por 2.
+    */
     cout << 2 * resp_posibles[0];
 
 
