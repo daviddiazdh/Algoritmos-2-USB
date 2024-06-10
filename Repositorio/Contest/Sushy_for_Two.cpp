@@ -3,56 +3,41 @@
 #include <cmath>
 using namespace std;
 
-vector<int> MAX_HEAPIFY(vector<int> A, int i, int n){
-    int largest;
-    int l = i*2 + 1; 
-    int r = i*2 + 2;
+vector<int> merge(vector<int> U, vector<int> V, vector<int> T, int m, int n) {
 
-    if(l < n && A[l] > A[i]){
-        largest = l;
+    int i = 0;
+    int j = 0;
+
+    U.push_back(100000);
+    V.push_back(100000);
+    for(int k = 0; k < m + n; k++){
+        
+        if(U[i] < V[j]){
+            T[k] = U[i];
+            i += 1;
+        } else {
+            T[k] = V[j];
+            j += 1;
+        }
+    }
+
+    return T;
+
+}
+
+vector<int> merge_sort(vector<int> T, float n) {
+    if( n == 1 ){
+        return T;
     } else {
-        largest = i;
-    }
+        vector<int> U(T.begin(), T.begin() + floor( n / 2 ));
 
-    if(r < n && A[r] > A[largest]){
-        largest = r;
-    }
+        vector<int> V(T.begin() + floor( n / 2 ), T.end());
 
-    if(largest != i){
-        int temp;
-        temp = A[i];
-        A[i] = A[largest];
-        A[largest] = temp;
-        A = MAX_HEAPIFY(A, largest, n);
+        U = merge_sort(U, floor( n / 2 ));
+        V = merge_sort(V, ceil( n / 2 ));
+        return merge(U, V, T, floor( n / 2 ), ceil( n / 2 ));
     }
-
-    return A;
 }
-
-vector<int> BUILD_MAX_HEAP(vector<int> A){
-    float n = A.size();
-    for(int i = floor(n/2) - 1; i >= 0; i--){
-        A = MAX_HEAPIFY(A, i, n);
-    }
-
-    return A;
-}
-
-vector<int> HEAP_SORT(vector<int> A){
-
-    A = BUILD_MAX_HEAP(A);
-    int n = A.size();
-    for(int i = n - 1; i >= 1; i--){
-        int temp;
-        temp = A[i];
-        A[i] = A[0];
-        A[0] = temp;
-        A = MAX_HEAPIFY(A, 0, i);
-    }
-    
-    return A;
-}
-
 
 int main() 
 {   
@@ -75,7 +60,7 @@ int main()
 
     El vector de respuestas tiene que ser ordenado para saber cuál será el segmento de tamaño máximo (o la respuesta posible más grande en el vector de respuestas)
 
-    Me aprovecho del BUILD-MAX-HEAP que hace que el vector quede ordenado de forma descendente para luego hacer print de el primer elemento del vector.
+    Me aprovecho del Merge Sort que hace que el vector quede ordenado de forma ascendente para luego hacer print de el último elemento del vector.
 
     */
 
@@ -115,13 +100,13 @@ int main()
         resp_posibles.push_back(contador);
     }
 
-    resp_posibles = BUILD_MAX_HEAP(resp_posibles);
+    resp_posibles = merge_sort(resp_posibles, int(resp_posibles.size()));
 
     /*
     El vector de respuestas posibles guarda los segmentos de tamaño n de cada uno que se pueden formar, 
     pero se quiere es la longitud total del segmento, así que imprimo la respuesta multiplicada por 2.
     */
-    cout << 2 * resp_posibles[0];
+    cout << 2 * resp_posibles[resp_posibles.size() - 1];
 
 
     return 0;
