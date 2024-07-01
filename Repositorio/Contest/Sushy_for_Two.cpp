@@ -67,7 +67,7 @@ int main()
     while(iterador > 0)
     {
         int i;
-        cin >> i;
+        cin >> i; 
         if(key == i)
         {
             contador += 1;
@@ -86,12 +86,12 @@ int main()
         iterador -= 1;
         /*
         En key_contador se guarda la cantidad de elementos previos del mismo tipo
-        Por ejemplo, en el segmento 11122211, 
+        Por ejemplo, en el segmento 11122211,
         key_contador guardaría el tamaño del segmento de solo 1's para poder compararlo con el de solo 2's. 
         Así no pierdo la info del segmento previo.
         */
     }
-
+    
     if(contador >= key_contador)
     {
         resp_posibles.push_back(key_contador);
