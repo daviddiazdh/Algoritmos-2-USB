@@ -6,27 +6,29 @@ struct Node {
     //data es el valor del nodo
     int data;
     //Agregué position que es la posicion del nodo, aunque varios nodos pueden tener la misma posicion si llegan a tener la misma data. 
-    //Una mejor explicación está en main()
+    //Una mejor explicación de esto está en main()
     int position;
     //color define el color del nodo, recordando que trabajamos con un arbol rojinegro
-    string color;
-    Node *left, *right, *parent;
+    string color = "RED";
+    Node *left = nullptr;
+    Node *right = nullptr;
+    Node *parent = nullptr;
 
-    //También defino left, right, parent, que son los hermanos izquierdo, derecho y el papá del nodo
-    Node(int data):
-        data(data), 
-        color("RED"), 
-        left(nullptr), 
-        right(nullptr), 
-        parent(nullptr)
-    {
-    }
 };
 
-class RedBlackTree {
-public:
+struct RedBlackTree {
     Node* root;
     Node* NIL;
+
+    //Constructor que define los árboles rojinegros
+    RedBlackTree()
+    {
+        NIL = new Node();
+        NIL -> data = 0;
+        NIL -> color = "BLACK";
+        NIL -> left = NIL->right = NIL;
+        root = NIL;
+    }
 
     //Función que ejecuta la rotación hacia la izquierda para preservar el arbol rojinegro.
     void leftRotate(Node* x)
@@ -129,20 +131,11 @@ public:
         return searchHelper(node->right, data);
     }
 
-public:
-    //Constructor que define los árboles rojinegros
-    RedBlackTree()
-    {
-        NIL = new Node(0);
-        NIL->color = "BLACK";
-        NIL->left = NIL->right = NIL;
-        root = NIL;
-    }
-
     //Función tradicional de árboles binarios, incluyendo una última llamada a fix_insert() que adecua el insert al caso de árboles rojinegros
     void insert(int data, int pos)
     {
-        Node* new_node = new Node(data);
+        Node* new_node = new Node();
+        new_node -> data = data;
         new_node->left = NIL;
         new_node->right = NIL;
         new_node -> position = pos;
