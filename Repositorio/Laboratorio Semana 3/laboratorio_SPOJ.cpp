@@ -94,7 +94,7 @@ int main()
         while( l <= r ){
             
             medio = floor(float(l+r) / 2);
-
+            
             if(posible_colocar_vacas(vacas, cantidad, medio)){
                 l = medio + 1;
             } else {
